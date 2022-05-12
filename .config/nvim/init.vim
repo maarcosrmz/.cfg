@@ -1,56 +1,75 @@
 call plug#begin('~/.local/share/nvim/plugged')
 
-Plug 'gosukiwi/vim-atom-dark'
+" Color schemes
 Plug 'joshdick/onedark.vim'
-Plug 'rakr/vim-one'
-Plug 'scrooloose/syntastic'
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'hzchirs/vim-material'
-Plug 'tpope/vim-sensible'
-Plug 'sheerun/vim-polyglot'
-Plug 'tpope/vim-fugitive'
-Plug 'honza/vim-snippets'
+
+" Syntax
+Plug 'vim-syntastic/syntastic' " Checking
+Plug 'sheerun/vim-polyglot' " Highlighting
+
+" Vim + Git
+Plug 'tpope/vim-fugitive' " Integrate git into vim
+Plug 'airblade/vim-gitgutter' " Show git diffs
+
+" Status line
 Plug 'itchyny/lightline.vim'
+"Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline-themes'
+Plug 'edkolev/tmuxline.vim' " Tmux status line generator
+
+" Fuzzy finder
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+" Pairs
+Plug 'jiangmiao/auto-pairs'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+
+" Comments
+Plug 'tpope/vim-commentary' 
+"Plug 'preservim/nerdcommenter' " Basically the same as above
+
+" Nerdtree
 Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-surround'
-Plug 'junegunn/fzf'
-Plug 'junegunn/fzf.vim'
-Plug 'preservim/nerdcommenter'
-Plug 'jiangmiao/auto-pairs'
-Plug 'editorconfig/editorconfig-vim'
-Plug 'tpope/vim-repeat'
-Plug 'easymotion/vim-easymotion'
-Plug 'alvan/vim-closetag'
-Plug 'vim-scripts/BufOnly.vim'
-Plug 'edkolev/tmuxline.vim'
-Plug 'matze/vim-move'
-Plug 'tpope/vim-commentary'
-Plug 'lukas-reineke/indent-blankline.nvim'
-Plug 'Yggdroot/indentLine'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'puremourning/vimspector'
-Plug 'voldikss/vim-floaterm'
-" Always load as last one
-Plug 'ryanoasis/vim-devicons'
+
+" Moving enhancements
+" Plug 'easymotion/vim-easymotion' " Faster movement (don't understand how to use)
+Plug 'matze/vim-move' " Visual way to move code up or down
+
+" Indentation
+Plug 'lukas-reineke/indent-blankline.nvim' " Indentation lines
+
+Plug 'neoclide/coc.nvim', {'branch': 'release'} " Completition
+Plug 'puremourning/vimspector' " Visual debugger 
+Plug 'voldikss/vim-floaterm' " Floating terminal
+
+" Icons for Nerdtree
+Plug 'ryanoasis/vim-devicons' " Always load as last one
 
 call plug#end()
 
-" Onehalf colortheme settings
-"set t_Co=256
-"set cursorline
-"colorscheme onehalfdark 
-"let g:airline_theme='onehalfdark'
+" Colortheme
+if (has("termguicolors"))
+    set termguicolors
+endif
 
-" vim-material colortheme settings
 syntax on
-let g:material_style='palenight'
-colorscheme vim-material
-let g:airline_theme='material'
+" joshdick/onedark.vim
+"colorscheme onedark
 
-let g:onedark_terminal_italics=1
-hi Normal guibg=NONE ctermbg=NONE
+" sonph/onehalf
+"colorscheme onehalfdark 
+
+" hzchirs/vim-material
+let g:material_style = 'palenight'
+colorscheme vim-material
+
+" sheerun/vim-polyglot
+set nocompatible
 
 " Custom config
 set tabstop=4
@@ -59,20 +78,11 @@ set expandtab
 set encoding=UTF-8
 set fileencoding=UTF-8
 set number
-syntax on
 
-if exists('+termguicolors')
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
-endif
-
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-
-" Ctrl + v to reload config
-nnoremap <c-v> :source $MYVIMRC<cr>
 " Set leader key
-let mapleader = "-"
+let mapleader = ","
+" <leader> + cr to reload config
+nnoremap <leader>cr :source $MYVIMRC<cr>
 
 " Relative numbers
 augroup numbertoggle
@@ -82,6 +92,10 @@ augroup numbertoggle
 augroup END
 
 " scrooloose/syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
@@ -92,20 +106,31 @@ let g:syntastic_c_checkers      = ['cpplint']
 let g:syntastic_cpp_checkers    = ['cpplint']
 
 " preservim/nerdtree
+" Open additional empty window when argument is a directory and not a file
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
+
+" Open Nerdtree when writing to file
 "autocmd BufWritePost * NERDTreeFocus | execute 'normal R' | wincmd p
-nmap <leader>r :NERDTreeFocus<cr>R<c-w><c-p>
-map <C-n> :NERDTreeToggle<CR>
+
+" Exit Vim if NERDTree is the only window remaining in the only tab.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+nnoremap <leader>r :NERDTreeFocus<cr>R<c-w><c-p>
+nnoremap <C-n> :NERDTreeToggle<CR>
+nnoremap <leader>fn :NERDTreeFind<CR>
+
+" Xuyuanp/nerdcommenter-git-plugin
+let g:NERDTreeGitStatusUseNerdFonts = 1
 
 " junegunn/fzf.vim
-let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+"let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 let g:fzf_buffers_jump = 1
 let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
 
-" itchyny/lightline.vim#one 
+" itchyny/lightline.vim
 let g:lightline = {
-      \ 'colorscheme': 'onedark',
+      \ 'colorscheme': 'material',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
@@ -309,8 +334,8 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " Vimspector
 let g:vimspector_enable_mappings = 'HUMAN'
-nmap <F1> :call vimspector#Launch()<cr>
-nmap <F2> :VimspectorReset<cr>
+nmap <leader>1 :call vimspector#Launch()<cr>
+nmap <leader>2 :VimspectorReset<cr>
 
 " Floatterm
 let g:floaterm_position = 'bottom'
