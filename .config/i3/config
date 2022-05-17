@@ -182,6 +182,12 @@ bindsym $mod+r mode "resize"
 # Open brave brower
 bindsym $mod+b exec brave
 
+# Keyboard and monitor brightness
+bindsym XF86KbdBrightnessUp exec --no-startup-id asusctl -n
+bindsym XF86KbdBrightnessDown exec --no-startup-id asusctl -p
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl s 5%+
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl s 5%-
+
 # Set gaps (i3-gaps)
 gaps inner 5
 
