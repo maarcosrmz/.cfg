@@ -71,17 +71,21 @@ keys = [
     Key([mod, "shift"], "o", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "shift"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "p", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
-    # Sound 
-    Key([], "XF86AudioRaiseVolume", lazy.spawn("pulsemixer --change-volume +5")),
-    Key([], "XF86AudioLowerVolume", lazy.spawn("pulsemixer --change-volume -5")),
-    Key([], "XF86AudioMute", lazy.spawn("pulsemixer --toggle-mute")),
+    # Sound
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("pulsemixer --change-volume +5"), desc="Increase volume"),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("pulsemixer --change-volume -5"), desc="Decrease volume"),
+    Key([], "XF86AudioMute", lazy.spawn("pulsemixer --toggle-mute"), desc="Mute"),
     # Keyboard brightness
-    Key([], "XF86KbdBrightnessUp", lazy.spawn("asusctl -n")),
-    Key([], "XF86KbdBrightnessDown", lazy.spawn("asusctl -p")),
+    Key([], "XF86KbdBrightnessUp", lazy.spawn("asusctl -n"), desc="Increase keyboard brightness"),
+    Key([], "XF86KbdBrightnessDown", lazy.spawn("asusctl -p"), desc="Decrease keyboard brightness"),
     # Monitor brightness
-    Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl s 5%+")),
-    Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl s 5%-")),
-
+    Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl s 5%+"), desc="Increase monitor brightness"),
+    Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl s 5%-"), desc="Decrease monitor brightness"),
+    # Asus aura + mode
+    Key(["shift"], "F4", lazy.spawn("asusctl led-mode -n"), desc="Change asus aura"),
+    Key(["shift"], "F5", lazy.spawn("asusctl profile -n"), desc="Change asus power profile"),
+    # Spawn browser
+    Key([mod], "b", lazy.spawn("brave"), desc="Spawn browser"),
 ]
 
 groups = [Group(i) for i in "123456789"]
