@@ -106,5 +106,6 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+EDITOR=nvim
 source $HOME/.zsh/aliases
 source $HOME/.zsh/path

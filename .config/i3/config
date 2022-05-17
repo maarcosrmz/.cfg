@@ -188,6 +188,9 @@ bindsym XF86KbdBrightnessDown exec --no-startup-id asusctl -p
 bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl s 5%+
 bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl s 5%-
 
+bindsym Shift+F4 exec --no-startup-id asusctl led-mode -n
+bindsym Shift+F5 exec --no-startup-id asusctl profile -n
+
 # Set gaps (i3-gaps)
 gaps inner 5
 
