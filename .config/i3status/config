@@ -5,7 +5,7 @@ general {
 }
 
 order += "ipv6"
-order += "ethernet eth0"
+order += "ethernet enp4s0f4u2u1"
 order += "wireless wlp2s0"
 order += "disk /"
 order += "memory"
@@ -17,7 +17,7 @@ wireless wlp2s0 {
         format_down = "W: down"
 }
 
-ethernet eth0 {
+ethernet enp4s0f4u2u1 {
         format_up = "E: %ip (%speed)"
         format_down = "E: down"
 }
