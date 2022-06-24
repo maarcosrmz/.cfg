@@ -104,8 +104,9 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers = ['pylint']
 let g:syntastic_python_pylint_args = "--disable=C0114"
 
-let g:syntastic_c_checkers      = ['cpplint']
+let g:syntastic_c_checkers      = ['gcc']
 let g:syntastic_cpp_checkers    = ['cpplint']
+let g:syntastic_cpp_cpplint_exec = 'cpplint'
 
 " preservim/nerdtree
 " Open additional empty window when argument is a directory and not a file
